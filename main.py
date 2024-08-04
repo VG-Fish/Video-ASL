@@ -40,11 +40,43 @@ def get():
     return (
         Title('Video ASL Converter'),
         Div(H2('Welcome to Video ASL Converter!', style='text-align: center;')),
+        Div(A('What is it?', href='/Description', style='text-decoration: none; font-size: 25px; margin-left: 20px; margin-right: 20px;'), A('Step by Step', href='/Steps', style='text-decoration: none; font-size: 25px; margin-left: 20px; margin-right: 20px;'), A('About Us', href='/About', style='text-decoration: none; font-size: 25px; margin-left: 20px; margin-right: 20px;'), style='display: flex; justify-content: center; align-items: center; background-color: white; height: 80px;'), 
         Div(H3('What Is Video ASL Converter?', style='text-align: center;'),
         P('Video ASL Converter is a project designed with the goal of making content accessible for the Deaf and Hard-of-Hearing community. Our platform takes your video and analyzes its components to generate a translation of the video in ASL. Whether it be a presentation, tutorial, or a form of entertainment, our platform ensures that your content is accessible to everyone. Join us as we attempt to overcome and solve barriers to communication and accessability worldwide.')),
         Div(H3('How to Use Video ASL Converter:'),
         H4('Step 1: Copy the link to your selected YouTube video.'),
         H4('Step 2: Click this', A('link', href='/convertor'), 'and paste the url of the video.')),
+        Div(H3('About Us'),
+        P('Video ASL Converter was created by a group of three high-school students with the goal of bridging gaps in communication and accessibility globally. We recognized the need for greater accessibility that comes with the global growth of media, and decided to develop a solution. Our work was fueled by a belief that access to information should be universal. Video ASL Converter was created as a means of increasing accessibility by making content more accessible to the Deaf community via converting speech to ASL.'))
+    )
+
+@rt("/Description")
+def get():
+    return (
+        Title('Video ASL Converter'),
+        Div(H2('Welcome to Video ASL Converter!', style='text-align: center;')),
+        Div(A('What is it?', href='/Description', style='text-decoration: none; font-size: 25px; margin-left: 20px; margin-right: 20px;'), A('Step by Step', href='/Steps', style='text-decoration: none; font-size: 25px; margin-left: 20px; margin-right: 20px;'), A('About Us', href='/About', style='text-decoration: none; font-size: 25px; margin-left: 20px; margin-right: 20px;'), style='display: flex; justify-content: center; align-items: center; background-color: white; height: 80px;'), 
+        Div(H3('What Is Video ASL Converter?', style='text-align: center;'),
+        P('Video ASL Converter is a project designed with the goal of making content accessible for the Deaf and Hard-of-Hearing community. Our platform takes your video and analyzes its components to generate a translation of the video in ASL. Whether it be a presentation, tutorial, or a form of entertainment, our platform ensures that your content is accessible to everyone. Join us as we attempt to overcome and solve barriers to communication and accessability worldwide.')),
+    )
+
+@rt("/Steps")
+def get():
+    return (
+        Title('Video ASL Converter'),
+        Div(H2('Welcome to Video ASL Converter!', style='text-align: center;')),
+        Div(A('What is it?', href='/Description', style='text-decoration: none; font-size: 25px; margin-left: 20px; margin-right: 20px;'), A('Step by Step', href='/Steps', style='text-decoration: none; font-size: 25px; margin-left: 20px; margin-right: 20px;'), A('About Us', href='/About', style='text-decoration: none; font-size: 25px; margin-left: 20px; margin-right: 20px;'), style='display: flex; justify-content: center; align-items: center; background-color: white; height: 80px;'), 
+        Div(H3('How to Use Video ASL Converter:'),
+        H4('Step 1: Copy the link to your selected YouTube video.'),
+        H4('Step 2: Click this', A('link', href='/convertor'), 'and paste the url of the video.')),
+    )
+
+@rt("/About")
+def get():
+    return (
+        Title('Video ASL Converter'),
+        Div(H2('Welcome to Video ASL Converter!', style='text-align: center;')),
+        Div(A('What is it?', href='/Description', style='text-decoration: none; font-size: 25px; margin-left: 20px; margin-right: 20px;'), A('Step by Step', href='/Steps', style='text-decoration: none; font-size: 25px; margin-left: 20px; margin-right: 20px;'), A('About Us', href='/About', style='text-decoration: none; font-size: 25px; margin-left: 20px; margin-right: 20px;'), style='display: flex; justify-content: center; align-items: center; background-color: white; height: 80px;'), 
         Div(H3('About Us'),
         P('Video ASL Converter was created by a group of three high-school students with the goal of bridging gaps in communication and accessibility globally. We recognized the need for greater accessibility that comes with the global growth of media, and decided to develop a solution. Our work was fueled by a belief that access to information should be universal. Video ASL Converter was created as a means of increasing accessibility by making content more accessible to the Deaf community via converting speech to ASL.'))
     )
