@@ -1,13 +1,12 @@
 from fasthtml.common import *
 from pytubefix import YouTube
-import validators
+import validators, string, os
 from urllib.parse import urlparse
 from bs4 import BeautifulSoup
 from video_creator import create_video
 
 
 app, rt = fast_app(live=True)
-asl_mapping = dict()
 
 def make_file_import():
     return Form(
@@ -27,7 +26,7 @@ def unable_to_parse_link():
         footer=P("Unable to parse link. Make sure it's a valid youtube link.")
     )
 
-def successfully_uploaded_video():
+def  default_video_state():
     return Titled(
         Card(
             make_file_import(),
@@ -36,8 +35,28 @@ def successfully_uploaded_video():
         )
     )
 
+def successfully_uploaded_video(output_path):
+    return (
+        default_video_state(),
+        A(f"Download Youtube Video ID = {output_path}", href=f"{output_path}.mp4", download=f"output-{output_path}")
+    )
+
 def get_captions_text(captions):
     return BeautifulSoup(captions.xml_captions, "lxml-xml").get_text()
+
+def get_asl_letter_file(letter: str):
+    if letter in string.ascii_lowercase:
+        return rf"asl/{letter}.jpg"
+
+def generate_video(captions: str, output_path):
+    input_files = []
+    for letter in captions:
+        if not letter.isspace():
+            input_files.append(get_asl_letter_file(letter.lower()))
+    durations = [0.4] * len(input_files)
+
+    input_files = [i for i in input_files if i]
+    create_video(input_files, durations, f"{output_path}.mp4")
 
 @rt("/")
 def get():
@@ -77,6 +96,8 @@ def post(link: str):
     captions = yt.captions.get_by_language_code('a.en')
     captions = get_captions_text(captions)
 
-    return successfully_uploaded_video()
+    generate_video(captions, video_id)
+
+    return successfully_uploaded_video(video_id)
 
 serve()
