@@ -60,7 +60,12 @@ def post(link: str):
 
     yt = YouTube(link)
     captions = yt.captions.get_by_language_code('a.en')
-    database.insert(Video(id=video_id, captions=captions.generate_srt_captions()))
+
+    try:
+        database.insert(Video(id=video_id, captions=captions.generate_srt_captions()))
+    except:
+        pass
+    
     return successully_uploaded_video()
 
 fh.serve()
