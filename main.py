@@ -38,7 +38,7 @@ def stringify_captions_file(id):
 @rt("/")
 def get():
     return fh.Titled(
-        "ASL Video",
+        "ASL Video Transcriber",
         fh.Div(fh.P('Welcome to ASL Video Converter!')),
         fh.A("Convertor", href="/convertor")
     )
