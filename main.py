@@ -2,8 +2,12 @@ from fasthtml.common import *
 from pytubefix import YouTube
 import validators
 from urllib.parse import urlparse
+from bs4 import BeautifulSoup
+from video_creator import create_video
 
-app, rt, database, Video = fast_app(db="data/videos.db", live=True, id=str, pk="id", captions=str)
+
+app, rt = fast_app(live=True)
+asl_mapping = dict()
 
 def make_file_import():
     return Form(
@@ -11,7 +15,7 @@ def make_file_import():
             Input(placeholder="Paste your youtube link", id="link"),
             Button("Submit")
         ),
-        hx_post="/convertor",
+        hx_post="/converter",
         hx_swap="innerHTML",
         target_id="vid-container"
     )
@@ -23,7 +27,7 @@ def unable_to_parse_link():
         footer=P("Unable to parse link. Make sure it's a valid youtube link.")
     )
 
-def successully_uploaded_video():
+def successfully_uploaded_video():
     return Titled(
         Card(
             make_file_import(),
@@ -32,8 +36,8 @@ def successully_uploaded_video():
         )
     )
 
-def stringify_captions_file(id):
-    pass
+def get_captions_text(captions):
+    return BeautifulSoup(captions.xml_captions, "lxml-xml").get_text()
 
 @rt("/")
 def get():
@@ -53,11 +57,12 @@ def get():
 def get():
     return (
         Div(A('Home', href='/', style='text-decoration: none; font-size: 25px; margin-left: 20px; margin-right: 20px;'), A('Converter', href='/convertor', style='text-decoration: none; font-size: 25px; margin-left: 20px; margin-right: 20px;'), style='background-color: white; display: flex; justify-content: center; align-items: center; height: 80px;'),
-        successully_uploaded_video()
+        successfully_uploaded_video()
     )
 
-@rt("/convertor")
+@rt("/converter")
 def post(link: str):
+    # check if link is valid
     if not validators.url(link):
         return unable_to_parse_link()
     
@@ -67,14 +72,11 @@ def post(link: str):
     else:
         video_id = video_id.split("=")[1]
 
+    # get captions
     yt = YouTube(link)
     captions = yt.captions.get_by_language_code('a.en')
+    captions = get_captions_text(captions)
 
-    try:
-        database.insert(Video(id=video_id, captions=captions.generate_srt_captions()))
-    except:
-        pass
-
-    return successully_uploaded_video()
+    return successfully_uploaded_video()
 
 serve()
