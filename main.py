@@ -1,15 +1,15 @@
-import fasthtml.common as fh
+from fasthtml.common import *
 from pytubefix import YouTube
 import validators
 from urllib.parse import urlparse
 
-app, rt, database, Video = fh.fast_app(db="data/videos.db", live=True, id=str, pk="id", captions=str)
+app, rt, database, Video = fast_app(db="data/videos.db", live=True, id=str, pk="id", captions=str)
 
 def make_file_import():
-    return fh.Form(
-        fh.Group(
-            fh.Input(placeholder="Paste your youtube link", id="link"),
-            fh.Button("Submit")
+    return Form(
+        Group(
+            Input(placeholder="Paste your youtube link", id="link"),
+            Button("Submit")
         ),
         hx_post="/convertor",
         hx_swap="innerHTML",
@@ -17,17 +17,17 @@ def make_file_import():
     )
 
 def unable_to_parse_link():
-    return fh.Card(
+    return Card(
         make_file_import(),
-        header=fh.A("Home", href="/"),
-        footer=fh.P("Unable to parse link. Make sure it's a valid youtube link.")
+        header=A("Home", href="/"),
+        footer=P("Unable to parse link. Make sure it's a valid youtube link.")
     )
 
 def successully_uploaded_video():
-    return fh.Titled(
-        fh.Card(
+    return Titled(
+        Card(
             make_file_import(),
-            header=fh.A("Home", href="/"),
+            header=A("Home", href="/"),
             id="vid-container"
         )
     )
@@ -37,10 +37,16 @@ def stringify_captions_file(id):
 
 @rt("/")
 def get():
-    return fh.Titled(
-        "ASL Video Transcriber",
-        fh.Div(fh.P('Welcome to ASL Video Converter!')),
-        fh.A("Convertor", href="/convertor")
+    return (
+        Title('Video ASL Converter'),
+        Div(H2('Welcome to Video ASL Converter!', style='text-align: center;')),
+        Div(H3('What Is Video ASL Converter?', style='text-align: center;'),
+        P('Video ASL Converter is a project designed with the goal of making content accessible for the Deaf and Hard-of-Hearing community. Our platform takes your video and analyzes its components to generate a translation of the video in ASL. Whether it be a presentation, tutorial, or a form of entertainment, our platform ensures that your content is accessible to everyone. Join us as we attempt to overcome and solve barriers to communication and accessability worldwide.')),
+        Div(H3('How to Use Video ASL Converter:'),
+        H4('Step 1: Copy the link to your selected YouTube video.'),
+        H4('Step 2: Click this', A('link', href='https://katyyouthhacks-2024.devpost.com/'), 'and paste the url of the video.')),
+        Div(H3('About Us'),
+        P('Video ASL Converter was created by a group of three high-school students with the goal of bridging gaps in communication and accessibility globally. We recognized the need for greater accessibility that comes with the global growth of media, and decided to develop a solution. Our work was fueled by a belief that access to information should be universal. Video ASL Converter was created as a means of increasing accessibility by making content more accessible to the Deaf community via converting speech to ASL.'))
     )
 
 @rt("/convertor")
@@ -65,7 +71,7 @@ def post(link: str):
         database.insert(Video(id=video_id, captions=captions.generate_srt_captions()))
     except:
         pass
-    
+
     return successully_uploaded_video()
 
-fh.serve()
+serve()
