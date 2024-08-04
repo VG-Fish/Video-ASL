@@ -5,7 +5,6 @@ from urllib.parse import urlparse
 from bs4 import BeautifulSoup
 from video_creator import create_video
 
-
 app, rt = fast_app(live=True)
 
 def make_file_import():
