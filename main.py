@@ -3,15 +3,7 @@ from pytubefix import YouTube
 import validators
 from urllib.parse import urlparse
 
-app, rt, database, video = fh.fast_app(db="data/videos.db", live=True, id=str, pk="id", captions=str)
-
-@rt("/")
-def get():
-    return fh.Titled(
-        "ASL Video",
-        fh.Div(fh.P('Welcome to ASL Video Converter!')),
-        fh.A("Convertor", href="/convertor")
-    )
+app, rt, database, Video = fh.fast_app(db="data/videos.db", live=True, id=str, pk="id", captions=str)
 
 def make_file_import():
     return fh.Form(
@@ -31,7 +23,7 @@ def unable_to_parse_link():
         footer=fh.P("Unable to parse link. Make sure it's a valid youtube link.")
     )
 
-def success():
+def successully_uploaded_video():
     return fh.Titled(
         fh.Card(
             make_file_import(),
@@ -40,25 +32,35 @@ def success():
         )
     )
 
+def stringify_captions_file(id):
+    pass
+
+@rt("/")
+def get():
+    return fh.Titled(
+        "ASL Video",
+        fh.Div(fh.P('Welcome to ASL Video Converter!')),
+        fh.A("Convertor", href="/convertor")
+    )
+
 @rt("/convertor")
 def get():
-    return success()
+    return successully_uploaded_video()
 
 @rt("/convertor")
 def post(link: str):
     if not validators.url(link):
         return unable_to_parse_link()
     
-    vid = urlparse(link).query
-    if not vid:
+    video_id = urlparse(link).query
+    if not video_id:
         return unable_to_parse_link()
     else:
-        vid = vid.split("=")[1]
-    
+        video_id = video_id.split("=")[1]
+
     yt = YouTube(link)
     captions = yt.captions.get_by_language_code('a.en')
-    if captions:
-        captions.save_captions("captions.txt")
-    return success()
+    database.insert(Video(id=video_id, captions=captions.generate_srt_captions()))
+    return successully_uploaded_video()
 
 fh.serve()
