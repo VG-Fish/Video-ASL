@@ -96,7 +96,10 @@ def post(link: str):
     # get captions
     yt = YouTube(link)
     captions = yt.captions.get_by_language_code('a.en')
-    captions = get_captions_text(captions)
+    if captions:
+        captions = get_captions_text(captions)
+    else:
+        return unable_to_parse_link()
 
     generate_video(captions, video_id)
 
